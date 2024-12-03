@@ -1,0 +1,20 @@
+default:
+  annotation: Поддерживаются всеми парсерами
+  parameters:
+    - name: --input
+      required: true
+      aliases: ["-i"]
+      description: путь к файлу для парсинга
+      example: python src/cnbc.py -i ./file.xlsx
+
+    - name: --output
+      required: false
+      aliases: ["-o"] 
+      description: путь, куда будет сохранён итоговый csv-файл, по умолчанию "out.csv"
+      example: python src/cnbc.py -i ./file.xlsx -o /usr/trt1.csv
+    
+    - name: --sparator
+      required: false
+      aliases: ["-sep"] 
+      description: явно указывает разделитель между столбцами CSV файла, по умолчанию символ табуляции
+      example: python src/cnbc.py -i ./file.xlsx -o /usr/trt1.csv -sep ";"
