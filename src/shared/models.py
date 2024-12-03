@@ -1,6 +1,5 @@
 from datetime import datetime
 from typing import Union
-from .options import ParserOptions
 
 class TvProgramData:
     #формате YYYY-mm-ddThh:mm:ss+tz:tz (пример - 2024-07-22T16:27:01+00:00)
@@ -36,24 +35,3 @@ class TvProgramData:
         self.channel_logo_url = channel_logo_url
         self.description = description
         self.available_archive = available_archive
-
-class TvParser:    
-    options: ParserOptions
-
-    def __init__(self, options: ParserOptions) -> None:
-        self.options = options
-
-
-    def in_config_time_interval(self, time):
-        if (self.options.start_date != None and time < self.options.start_date):
-            return False
-        
-        if (self.options.finish_date != None and time > self.options.finish_date):
-            return False
-        
-        return True
-
-    async def parse_async(self) ->  list[TvProgramData]:
-        pass
-
-

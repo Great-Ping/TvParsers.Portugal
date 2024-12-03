@@ -2,12 +2,14 @@ import asyncio
 from datetime import datetime
 import os
 from typing import *
+from zipfile import ZipFile
 from aiofile import async_open
 
+from shared.base_parser import XlsxTvParser
 from shared.utils import replace_spaces
 
 from .options import SaveOptions
-from .models import TvParser, TvProgramData
+from .models import TvProgramData
 
 def escape(input: str):
     if (input is None):
@@ -37,13 +39,13 @@ def __to_csv_line(data:TvProgramData, options: SaveOptions):
     + f"{options.separator}{str(int(data.available_archive))}"
     + "\n")
 
-async def __out_to_csv_async(tvPrograms: list[TvProgramData], options: SaveOptions):
+def __out_to_csv(tvPrograms: list[TvProgramData], options: SaveOptions):
     dirname = os.path.dirname(options.output_path)
     if (dirname != None and dirname != ""):
         os.makedirs(dirname, exist_ok=True)
         
-    async with async_open(options.output_path, "w+") as asyncStream:
-        await asyncStream.write(
+    with open(options.output_path, "w+", encoding="utf-8") as stream:
+        stream.write(
             "\"datetime_start\""
             +f"{options.separator}\"datetime_finish\""
             +f"{options.separator}\"channel\""
@@ -54,17 +56,16 @@ async def __out_to_csv_async(tvPrograms: list[TvProgramData], options: SaveOptio
             +"\n")
 
         for tvProgram in tvPrograms:
-            await asyncStream.write(
-                __to_csv_line(tvProgram, options)
+            csv_line = __to_csv_line(tvProgram, options)
+            stream.write(
+                csv_line
             )
-        return
 
-async def run_parser_out_to_csv_async(parser: TvParser, options: SaveOptions):
-    parsedData = await parser.parse_async()
-    await __out_to_csv_async(parsedData, options)
 
-def run_parser_out_to_csv(parser: TvParser, options: SaveOptions):
-    loop = asyncio.get_event_loop()
-    loop.run_until_complete(
-        run_parser_out_to_csv_async(parser, options)
-    )
+def run_parser_out_to_csv(
+        parser: XlsxTvParser, 
+        options: SaveOptions
+):
+    with ZipFile(options.input_path, "r") as xlsx_file:
+        parsedData = parser.parse(xlsx_file)
+        __out_to_csv(parsedData, options)
