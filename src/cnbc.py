@@ -10,7 +10,7 @@ from shared.utils import fill_finish_date_by_next_start_date
 class CnbcParser(XlsxTvParser):
     __first_header_index = 7
     __response_timezone = timezone(timedelta(hours=3))
-    __min_date = datetime(year=1900, month=1, day=1) - timedelta(days=1)
+    __min_date = datetime(year=1900, month=1, day=1) - timedelta(days=2)
 
     def parse(self, xlsx_file: ZipFile):
         row_strings = self._read_strings(xlsx_file)
