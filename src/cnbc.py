@@ -1,5 +1,5 @@
 from shared.options import read_command_line_options
-from shared.common_parser import CommonParser
+from shared.program_parser import CommonParser
 from shared.output import run_parser_out_to_csv
 
 if (__name__=="__main__"):

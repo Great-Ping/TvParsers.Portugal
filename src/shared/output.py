@@ -5,7 +5,7 @@ from typing import *
 from zipfile import ZipFile
 from aiofile import async_open
 
-from shared.base_parser import XlsxTvParser
+from shared.xlsx_parser import XlsxParser
 from shared.utils import replace_spaces
 
 from .options import SaveOptions
@@ -63,7 +63,7 @@ def __out_to_csv(tvPrograms: list[TvProgramData], options: SaveOptions):
 
 
 def run_parser_out_to_csv(
-        parser: XlsxTvParser, 
+        parser: XlsxParser, 
         options: SaveOptions
 ):
     with ZipFile(options.input_path, "r") as xlsx_file:
