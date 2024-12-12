@@ -18,3 +18,21 @@ default:
       aliases: ["-sep"] 
       description: явно указывает разделитель между столбцами CSV файла, по умолчанию символ табуляции
       example: python src/cnbc.py -i ./file.xlsx -o /usr/trt1.csv -sep ";"
+
+    - name: --use-smb-for-input
+      required: false
+      aliases: ["-ismb"] 
+      description: Указывает на то что файл находится на smb сервере
+      example: python src/cnbc.py -i "\\ZERO\Shared\file.xlsx" -ismb
+
+    - name: --user-name
+      required: false
+      aliases: ["-u"] 
+      description: Имя пользователя для smb, по умолчанию отсутствует
+      example: python src/cnbc.py -i "\\ZERO\Shared\file.xlsx" -ismb --user-name da18 --password qwerty
+
+    - name: --password
+      required: false
+      aliases: ["-p"] 
+      description: Имя пользователя для smb, по умолчанию отсутствует
+      example: python src/cnbc.py -i "\\ZERO\Shared\file.xlsx" -ismb --user-name da18 --password qwerty

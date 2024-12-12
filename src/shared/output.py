@@ -1,9 +1,8 @@
-import asyncio
-from datetime import datetime
 import os
-from typing import *
+import smbclient
 from zipfile import ZipFile
-from aiofile import async_open
+from datetime import datetime
+from typing import *
 
 from shared.xlsx_parser import XlsxParser
 from shared.utils import replace_spaces
@@ -62,10 +61,28 @@ def __out_to_csv(tvPrograms: list[TvProgramData], options: SaveOptions):
             )
 
 
+def __select_input_file_stream(options: SaveOptions):
+    if options.use_smb:
+        #singleton o_0
+        smbclient.ClientConfig(
+            username=options.user_name,
+            password=options.password
+        )
+
+        return smbclient.open_file(
+            options.input_path,
+            "rb"
+        )
+    else: 
+        return open(options.input_path, "rb")
+
+
+
 def run_parser_out_to_csv(
         parser: XlsxParser, 
         options: SaveOptions
 ):
-    with ZipFile(options.input_path, "r") as xlsx_file:
-        parsedData = parser.parse(xlsx_file)
-        __out_to_csv(parsedData, options)
+    with __select_input_file_stream(options) as zip_file:
+        with ZipFile(zip_file) as xlsx_file:
+            parsedData = parser.parse(xlsx_file)
+            __out_to_csv(parsedData, options)
