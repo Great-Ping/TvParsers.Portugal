@@ -8,8 +8,8 @@ python src/cnbc.py -i ./file.xlsx
 <br>
 
 ## Параметры по умолчанию
-В файле [default_config.json](src/default_config.json)
-Для описания используется следующая структура данных 
+В файле [default_config.json](src/default_config.json) <br>
+Для описания используется следующая структура данных:
 ```json
 {
     "Имя Парсера":{
