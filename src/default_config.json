@@ -1,0 +1,19 @@
+{
+    "cnbc": {
+        "input":  "\\\\ZERO\\Shared\\file.xlsx", 
+        "ismb": true,
+        "username": null,
+        "password": null,
+        "output": "./out.csv",
+        "separator": "\t"
+    },
+
+    "uol": {
+        "input": "\\\\ZERO\\Shared\\file.xlsx",
+        "ismb": true,
+        "username": null,
+        "password": null,
+        "output": "./out.csv",
+        "separator": "\t"
+    }
+}

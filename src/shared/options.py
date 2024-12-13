@@ -1,3 +1,7 @@
+import os
+from os.path import abspath
+from inspect import getsourcefile
+import json
 from datetime import datetime, UTC
 from typing import Union
 from argparse import ArgumentParser
@@ -42,18 +46,36 @@ class Options:
         self.save_options = save_options
 
 
-def create_default_arg_parser() -> ArgumentParser:
+def create_default_arg_parser(options: Options) -> ArgumentParser:
     args_parser = ArgumentParser()
-    args_parser.add_argument("-i", "--input", required=True)
-    args_parser.add_argument("-o", "--output", default="out.csv")
-    args_parser.add_argument("-sep", "--separator", default="\t")
-    args_parser.add_argument("-ismb", "--use-smb-for-input", default=False, action='store_true')
-    args_parser.add_argument("-u", "--user-name", default=None)
-    args_parser.add_argument("-p", "--password", default=None)
+    args_parser.add_argument("-i", "--input", default=options.save_options.input_path)
+    args_parser.add_argument("-o", "--output", default=options.save_options.output_path)
+    args_parser.add_argument("-sep", "--separator", default=options.save_options.separator)
+    args_parser.add_argument("-ismb", "--use-smb-for-input", default=options.save_options.use_smb, action='store_true')
+    args_parser.add_argument("-u", "--user-name", default=options.save_options.user_name)
+    args_parser.add_argument("-p", "--password", default=options.save_options.password)
     return args_parser
 
-def read_command_line_options() -> Options:
-    parser = create_default_arg_parser()
+
+def read_config_json(parser_name, config_path):
+    with open(config_path) as file:
+        config = json.load(file)
+        config = config[parser_name]
+        save_options = SaveOptions(
+            config["input"],
+            config["output"],
+            config["separator"],
+            config["ismb"],
+            config["username"],
+            config["password"]
+        )
+
+        return Options(ParserOptions(), save_options)
+    
+
+
+def read_command_line_options(default: Options) -> Options:
+    parser = create_default_arg_parser(default)
     args = parser.parse_args()
     
     parser_options = ParserOptions()
